@@ -17,30 +17,30 @@
   </div>
 
   <!-- Search & Filter Controls -->
-  <div class="card mb-4" style="border-radius: 12px; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+  <div class="card filter-card mb-4">
     <div class="card-body py-3">
       <div class="row align-items-center">
-        <div class="col-md-7 mb-2 mb-md-0">
+        <div class="col-lg-6 col-md-5 mb-2 mb-md-0">
           <div class="input-group">
             <div class="input-group-prepend">
-              <span class="input-group-text bg-white border-right-0" style="border-radius: 8px 0 0 8px;">
-                <i class="fas fa-search text-muted"></i>
+              <span class="input-group-text border-right-0">
+                <i class="fas fa-search"></i>
               </span>
             </div>
-            <input type="text" id="myReqSearch" class="form-control border-left-0" placeholder="Search by reason, date, or notes..." style="border-radius: 0 8px 8px 0; font-size: 14px;">
+            <input type="text" id="myReqSearch" class="form-control border-left-0" placeholder="Search by reason, date, or clinical notes...">
           </div>
         </div>
-        <div class="col-md-3 mb-2 mb-md-0">
-          <select id="myReqStatusFilter" class="form-control" style="border-radius: 8px; font-size: 14px;">
+        <div class="col-lg-4 col-md-4 mb-2 mb-md-0">
+          <select id="myReqStatusFilter" class="form-control">
             <option value="">Status (All)</option>
-            <option value="Pending">Pending</option>
-            <option value="Approved">Approved</option>
-            <option value="Rejected">Rejected</option>
+            <option value="Pending">Status: Under Review</option>
+            <option value="Approved">Status: Approved</option>
+            <option value="Rejected">Status: Rejected</option>
           </select>
         </div>
-        <div class="col-md-2">
-          <button id="resetMyReqFilter" class="btn btn-outline-secondary btn-block" style="border-radius: 8px; font-size: 14px;">
-            <i class="fas fa-undo mr-1"></i> Reset
+        <div class="col-lg-2 col-md-3">
+          <button id="resetMyReqFilter" class="btn-reset-filter" title="Reset Filters">
+            <i class="fas fa-undo"></i> <span>Reset</span>
           </button>
         </div>
       </div>
