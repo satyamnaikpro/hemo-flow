@@ -7,11 +7,16 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static')
 
-SECRET_KEY = '+zy!9k=9pql5gz9bkqjore)k6r!%w0atk(@(!(!zvp5e(t2i8n'
+SECRET_KEY = os.environ.get('SECRET_KEY', '+zy!9k=9pql5gz9bkqjore)k6r!%w0atk(@(!(!zvp5e(t2i8n')
 
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver', '.vercel.app', '*']
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.vercel.app',
+    'http://127.0.0.1',
+    'http://localhost',
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -35,6 +40,14 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# Enable WhiteNoise when available (for production static asset serving on Vercel)
+try:
+    import whitenoise  # noqa: F401
+    MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+except ImportError:
+    pass
 
 CSRF_COOKIE_SECURE = False
 
@@ -65,6 +78,19 @@ DATABASES = {
     }
 }
 
+# External database support for production (e.g. Supabase / Neon PostgreSQL on Vercel)
+database_url = os.environ.get('DATABASE_URL')
+if database_url:
+    try:
+        import dj_database_url
+        DATABASES['default'] = dj_database_url.config(
+            default=database_url,
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
+    except ImportError:
+        pass
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -94,6 +120,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     STATIC_DIR,
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 LOGIN_REDIRECT_URL = '/afterlogin'
 
