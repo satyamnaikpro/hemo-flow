@@ -1,0 +1,621 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hemo Flow - Blood Bank Management &amp; Donation Network</title>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    body {
+      background-color: #f8f9fa;
+      color: #2b2d42;
+      overflow-x: hidden;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(135deg, #1d2d44 0%, #b8001f 65%, #d90429 100%);
+      color: #ffffff;
+      padding: 135px 0 85px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.16);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      color: #ffffff !important;
+      padding: 7px 18px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 22px;
+      text-transform: uppercase;
+    }
+    .hero-badge i {
+      color: #ffccd5;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+    .hero-title {
+      font-size: 44px;
+      font-weight: 800;
+      line-height: 1.25;
+      color: #ffffff !important;
+      margin-bottom: 20px;
+      letter-spacing: -0.5px;
+    }
+    .hero-subtitle {
+      font-size: 16px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.92) !important;
+      line-height: 1.7;
+      margin-bottom: 35px;
+      max-width: 580px;
+    }
+
+    /* Fixed High-Contrast Hero CTA Buttons */
+    .hero-btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+    }
+    .btn-hero-request {
+      background: #ffffff !important;
+      color: #d90429 !important;
+      font-weight: 700 !important;
+      font-size: 15px !important;
+      padding: 14px 30px !important;
+      border-radius: 10px !important;
+      border: 2px solid #ffffff !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 9px !important;
+      text-decoration: none !important;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22) !important;
+      transition: all 0.25s ease !important;
+    }
+    .btn-hero-request:hover {
+      background: #f8f9fa !important;
+      color: #ba0321 !important;
+      transform: translateY(-3px) !important;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3) !important;
+    }
+    .btn-hero-donate {
+      background: rgba(255, 255, 255, 0.15) !important;
+      color: #ffffff !important;
+      font-weight: 600 !important;
+      font-size: 15px !important;
+      padding: 14px 28px !important;
+      border-radius: 10px !important;
+      border: 2px solid rgba(255, 255, 255, 0.85) !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 9px !important;
+      text-decoration: none !important;
+      backdrop-filter: blur(8px) !important;
+      transition: all 0.25s ease !important;
+    }
+    .btn-hero-donate:hover {
+      background: rgba(255, 255, 255, 0.3) !important;
+      color: #ffffff !important;
+      border-color: #ffffff !important;
+      transform: translateY(-3px) !important;
+      text-decoration: none !important;
+    }
+
+    /* Hero Live Stats Box */
+    .hero-metrics-card {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.2);
+    }
+    .hero-metrics-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .hero-metrics-header h5 {
+      color: #ffffff;
+      font-weight: 700;
+      margin: 0;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .live-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #a7f3d0;
+      background: rgba(16, 185, 129, 0.25);
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+    .metric-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .metric-item {
+      background: rgba(0, 0, 0, 0.18);
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .metric-num {
+      font-size: 26px;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .metric-label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 500;
+    }
+
+    /* Pipeline / How It Works */
+    .step-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 30px 24px;
+      height: 100%;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    .step-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 14px 32px rgba(217, 4, 41, 0.1);
+      border-color: rgba(217, 4, 41, 0.2);
+    }
+    .step-num {
+      position: absolute;
+      top: 18px;
+      right: 20px;
+      font-size: 32px;
+      font-weight: 800;
+      color: #f1f3f5;
+    }
+    .step-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .step-1 .step-icon { background: #fee2e2; color: #dc2626; }
+    .step-2 .step-icon { background: #e0f2fe; color: #0284c7; }
+    .step-3 .step-icon { background: #fef3c7; color: #d97706; }
+    .step-card h5 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #1d2d44;
+    }
+    .step-card p {
+      font-size: 13.5px;
+      color: #6c757d;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* Live Blood Stock Grid */
+    .stock-grid-card {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 22px 18px;
+      text-align: center;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .stock-grid-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: #d90429;
+    }
+    .stock-grid-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 24px rgba(217, 4, 41, 0.12);
+      border-color: #ef233c;
+    }
+    .stock-blood-group {
+      font-size: 26px;
+      font-weight: 800;
+      color: #d90429;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .stock-badge-pill {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: inline-block;
+    }
+    .stock-avail {
+      background: #dcfce7;
+      color: #15803d;
+    }
+    .stock-empty {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+    .stock-request-link {
+      display: block;
+      margin-top: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #0284c7;
+      text-decoration: none;
+    }
+    .stock-request-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Two Big Role Entry Banners */
+    .portal-banner {
+      border-radius: 18px;
+      padding: 34px;
+      color: #ffffff;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+    .portal-banner:hover {
+      transform: translateY(-5px);
+    }
+    .banner-patient {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+    }
+    .banner-donor {
+      background: linear-gradient(135deg, #d90429 0%, #ba0321 100%);
+    }
+    .banner-content h4 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .banner-content p {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    .banner-btn-patient {
+      background: #ffffff !important;
+      color: #0284c7 !important;
+      font-weight: 700 !important;
+      padding: 12px 24px !important;
+      border-radius: 8px !important;
+      border: none !important;
+      text-decoration: none !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      width: fit-content;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+    .banner-btn-patient:hover {
+      background: #f0f9ff !important;
+      color: #0369a1 !important;
+    }
+    .banner-btn-donor {
+      background: #ffffff !important;
+      color: #d90429 !important;
+      font-weight: 700 !important;
+      padding: 12px 24px !important;
+      border-radius: 8px !important;
+      border: none !important;
+      text-decoration: none !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      width: fit-content;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+    .banner-btn-donor:hover {
+      background: #fff1f2 !important;
+      color: #ba0321 !important;
+    }
+
+    /* Guidelines / FAQ Box */
+    .guideline-card {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 22px;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      height: 100%;
+    }
+    .guideline-card i {
+      font-size: 22px;
+      color: #ef233c;
+      margin-bottom: 12px;
+    }
+    .guideline-card h6 {
+      font-weight: 700;
+      color: #1d2d44;
+      margin-bottom: 8px;
+    }
+    .guideline-card p {
+      font-size: 13px;
+      color: #6c757d;
+      margin: 0;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+
+<body>
+  {% include "blood/navbar.html" %}
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <!-- Left: Text & Visible CTA Buttons -->
+        <div class="col-lg-7 mb-5 mb-lg-0">
+          <div class="hero-badge">
+            <i class="fas fa-heartbeat"></i> Real-time Blood Donation Platform
+          </div>
+          <h1 class="hero-title">Life Flows When We Give. Saving Lives Made Seamless.</h1>
+          <p class="hero-subtitle">
+            Hemo Flow connects voluntary donors directly with patients and healthcare centers in urgent need of life-saving blood units &mdash; fast, verified, and completely transparent.
+          </p>
+
+          <div class="hero-btn-group">
+            <a href="/patient/patientlogin" class="btn-hero-request">
+              <i class="fas fa-procedures"></i> Request Blood
+            </a>
+            <a href="/donor/donorlogin" class="btn-hero-donate">
+              <i class="fas fa-hand-holding-heart"></i> Donate Blood
+            </a>
+          </div>
+
+          <div class="mt-4" style="font-size: 13px; color: rgba(255, 255, 255, 0.75);">
+            <i class="fas fa-shield-alt text-warning"></i> Hospital staff or administrator? 
+            <a href="/adminlogin" style="color: #ffffff; font-weight: 600; text-decoration: underline; margin-left: 4px;">Admin Portal Console &rarr;</a>
+          </div>
+        </div>
+
+        <!-- Right: Live System Stats Counter -->
+        <div class="col-lg-5">
+          <div class="hero-metrics-card">
+            <div class="hero-metrics-header">
+              <h5><i class="fas fa-chart-line text-danger"></i> Live System Status</h5>
+              <span class="live-indicator"><i class="fas fa-circle" style="font-size: 8px;"></i> Online</span>
+            </div>
+
+            <div class="metric-grid">
+              <div class="metric-item">
+                <div class="metric-num">{{ total_units }}</div>
+                <div class="metric-label"><i class="fas fa-cubes text-muted"></i> Units in Bank</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-num">{{ total_donors }}</div>
+                <div class="metric-label"><i class="fas fa-users text-muted"></i> Active Donors</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-num">{{ total_requests }}</div>
+                <div class="metric-label"><i class="fas fa-file-medical text-muted"></i> Total Requests</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-num">{{ approved_requests }}</div>
+                <div class="metric-label"><i class="fas fa-check-circle text-success"></i> Approved Lives Saved</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works / 3-Step Pipeline -->
+  <section class="py-5" style="margin-top: -30px; position: relative; z-index: 10;">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mb-4 mb-md-0">
+          <div class="step-card step-1">
+            <div class="step-num">01</div>
+            <div class="step-icon"><i class="fas fa-user-plus"></i></div>
+            <h5>Register &amp; Profile</h5>
+            <p>Donors and patients register with verified medical and contact details to ensure accurate matching.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4 mb-md-0">
+          <div class="step-card step-2">
+            <div class="step-num">02</div>
+            <div class="step-icon"><i class="fas fa-hand-holding-medical"></i></div>
+            <h5>Request or Donate</h5>
+            <p>Submit blood donation slots or emergency requisition orders with specific unit quantities needed.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="step-card step-3">
+            <div class="step-num">03</div>
+            <div class="step-icon"><i class="fas fa-clipboard-check"></i></div>
+            <h5>Admin Verification</h5>
+            <p>Authorised hospital staff review, manage blood stock inventory, and approve requisitions in real-time.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Blood Inventory Matrix -->
+  <section class="py-5">
+    <div class="container">
+      <div class="text-center mb-4">
+        <span class="badge badge-pill badge-danger mb-2" style="padding: 6px 14px; font-size: 11px; text-transform: uppercase;">Inventory Tracking</span>
+        <h3 style="font-weight: 800; color: #1d2d44;">Available Blood Bank Stock</h3>
+        <p class="text-muted" style="font-size: 14px; max-width: 550px; margin: 0 auto;">
+          Real-time unit levels stored in the Hemo Flow repository. Directly requisition any compatible group.
+        </p>
+      </div>
+
+      <div class="row">
+        {% if stocks %}
+          {% for stock in stocks %}
+            <div class="col-6 col-md-3 mb-4">
+              <div class="stock-grid-card">
+                <div class="stock-blood-group">{{ stock.bloodgroup }}</div>
+                {% if stock.unit > 0 %}
+                  <span class="stock-badge-pill stock-avail"><i class="fas fa-check-circle"></i> {{ stock.unit }} Units</span>
+                {% else %}
+                  <span class="stock-badge-pill stock-empty"><i class="fas fa-exclamation-circle"></i> 0 Units</span>
+                {% endif %}
+                <a href="/patient/patientlogin" class="stock-request-link">Request Units &rarr;</a>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="col-6 col-md-3 mb-4"><div class="stock-grid-card"><div class="stock-blood-group">A+</div><span class="stock-badge-pill stock-avail">Available</span></div></div>
+          <div class="col-6 col-md-3 mb-4"><div class="stock-grid-card"><div class="stock-blood-group">A-</div><span class="stock-badge-pill stock-avail">Available</span></div></div>
+          <div class="col-6 col-md-3 mb-4"><div class="stock-grid-card"><div class="stock-blood-group">B+</div><span class="stock-badge-pill stock-avail">Available</span></div></div>
+          <div class="col-6 col-md-3 mb-4"><div class="stock-grid-card"><div class="stock-blood-group">B-</div><span class="stock-badge-pill stock-avail">Available</span></div></div>
+          <div class="col-6 col-md-3 mb-4"><div class="stock-grid-card"><div class="stock-blood-group">O+</div><span class="stock-badge-pill stock-avail">Available</span></div></div>
+          <div class="col-6 col-md-3 mb-4"><div class="stock-grid-card"><div class="stock-blood-group">O-</div><span class="stock-badge-pill stock-avail">Available</span></div></div>
+          <div class="col-6 col-md-3 mb-4"><div class="stock-grid-card"><div class="stock-blood-group">AB+</div><span class="stock-badge-pill stock-avail">Available</span></div></div>
+          <div class="col-6 col-md-3 mb-4"><div class="stock-grid-card"><div class="stock-blood-group">AB-</div><span class="stock-badge-pill stock-avail">Available</span></div></div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Clear Role Access Banners -->
+  <section class="py-4">
+    <div class="container">
+      <div class="row">
+        <!-- Patient Banner -->
+        <div class="col-md-6 mb-4 mb-md-0">
+          <div class="portal-banner banner-patient">
+            <div class="banner-content">
+              <span class="badge badge-light text-primary font-weight-bold mb-2">FOR PATIENTS &amp; RECIPIENTS</span>
+              <h4>Urgent Blood Requisition</h4>
+              <p>Experiencing medical emergencies, surgeries, or chronic conditions? Create a blood request to be approved by on-duty administrators.</p>
+            </div>
+            <a href="/patient/patientlogin" class="banner-btn-patient">
+              <i class="fas fa-procedures"></i> Access Patient Desk
+            </a>
+          </div>
+        </div>
+
+        <!-- Donor Banner -->
+        <div class="col-md-6">
+          <div class="portal-banner banner-donor">
+            <div class="banner-content">
+              <span class="badge badge-light text-danger font-weight-bold mb-2">FOR VOLUNTARY DONORS</span>
+              <h4>Become a Lifesaver Today</h4>
+              <p>Your single donation can save up to 3 individual lives. Schedule a donation slot and track your lifetime donation history.</p>
+            </div>
+            <a href="/donor/donorlogin" class="banner-btn-donor">
+              <i class="fas fa-hand-holding-heart"></i> Access Donor Desk
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Donor Eligibility Guidelines -->
+  <section class="py-5 bg-white border-top border-bottom mt-5">
+    <div class="container">
+      <div class="text-center mb-4">
+        <h4 style="font-weight: 700; color: #1d2d44;"><i class="fas fa-stethoscope text-danger"></i> Donor Eligibility &amp; Quick Facts</h4>
+        <p class="text-muted" style="font-size: 13.5px;">Basic requirements to ensure safe blood transfusion for everyone</p>
+      </div>
+
+      <div class="row">
+        <div class="col-md-3 col-sm-6 mb-3">
+          <div class="guideline-card">
+            <i class="fas fa-birthday-cake"></i>
+            <h6>Age Requirement</h6>
+            <p>Donors must be between 18 and 65 years old in sound general health.</p>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+          <div class="guideline-card">
+            <i class="fas fa-weight"></i>
+            <h6>Healthy Weight</h6>
+            <p>Minimum body weight of 50 kg (110 lbs) is required for donor safety.</p>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+          <div class="guideline-card">
+            <i class="fas fa-history"></i>
+            <h6>Donation Gap</h6>
+            <p>Wait at least 3 months (90 days) between successive whole blood donations.</p>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+          <div class="guideline-card">
+            <i class="fas fa-shield-virus"></i>
+            <h6>Safe Transfusion</h6>
+            <p>All blood units undergo routine testing for infectious diseases prior to approval.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {% include "blood/footer.html" %}
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

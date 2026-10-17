@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .hemo-navbar {
+      background: linear-gradient(135deg, #d90429 0%, #ef233c 100%);
+      box-shadow: 0 4px 18px rgba(217, 4, 41, 0.25);
+      padding: 12px 24px;
+      transition: all 0.3s ease;
+    }
+    .hemo-navbar .navbar-brand {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #ffffff !important;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .hemo-navbar .navbar-brand i {
+      font-size: 24px;
+      animation: heartbeat 1.6s infinite ease-in-out;
+    }
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      14% { transform: scale(1.18); }
+      28% { transform: scale(1); }
+      42% { transform: scale(1.12); }
+      70% { transform: scale(1); }
+    }
+    .hemo-navbar .nav-link {
+      color: rgba(255, 255, 255, 0.92) !important;
+      font-weight: 500;
+      font-size: 15px;
+      padding: 8px 16px !important;
+      border-radius: 8px;
+      margin: 0 3px;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .hemo-navbar .nav-link:hover {
+      background: rgba(255, 255, 255, 0.18);
+      color: #ffffff !important;
+      transform: translateY(-1px);
+    }
+    .hemo-navbar .nav-link.admin-btn {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .hemo-navbar .nav-link.admin-btn:hover {
+      background: rgba(0, 0, 0, 0.35);
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top hemo-navbar">
+    <div class="container">
+      <a href="/" class="navbar-brand">
+        <i class="fas fa-heartbeat"></i>
+        <span>Hemo Flow</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#hemoNavCollapse" aria-controls="hemoNavCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="hemoNavCollapse">
+        <ul class="navbar-nav ml-auto align-items-lg-center">
+          <li class="nav-item">
+            <a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/patient/patientlogin"><i class="fas fa-procedures"></i> Patient Portal</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/donor/donorlogin"><i class="fas fa-hand-holding-heart"></i> Donor Portal</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link admin-btn" href="/adminlogin"><i class="fas fa-user-shield"></i> Admin Desk</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</body>
+</html>

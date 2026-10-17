@@ -1,0 +1,195 @@
+{% load static %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Patient Login - Hemo Flow</title>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    body {
+      background-color: #f4f6f9;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .auth-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 15px 50px;
+    }
+    .auth-card {
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      width: 100%;
+      max-width: 440px;
+      overflow: hidden;
+    }
+    .auth-header {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: #ffffff;
+      padding: 30px 24px;
+      text-align: center;
+      position: relative;
+    }
+    .auth-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: #38bdf8;
+    }
+    .auth-icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      color: #ffffff;
+      margin-bottom: 12px;
+    }
+    .auth-header h3 {
+      font-size: 22px;
+      font-weight: 700;
+      margin: 0;
+    }
+    .auth-header p {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.85);
+      margin: 5px 0 0;
+    }
+    .auth-body {
+      padding: 32px 28px;
+    }
+    .form-group label {
+      font-weight: 600;
+      font-size: 13px;
+      color: #495057;
+      margin-bottom: 6px;
+    }
+    .form-control-hemo {
+      border: 1.5px solid #dee2e6;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 14px;
+      transition: all 0.2s ease;
+      height: auto;
+      width: 100%;
+    }
+    .form-control-hemo:focus {
+      border-color: #0284c7;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+      outline: none;
+    }
+    .btn-auth {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: #ffffff;
+      font-weight: 600;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      width: 100%;
+      font-size: 15px;
+      transition: all 0.25s ease;
+      box-shadow: 0 6px 15px rgba(2, 132, 199, 0.25);
+    }
+    .btn-auth:hover {
+      background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+    .auth-register-link {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      color: #6c757d;
+    }
+    .auth-register-link a {
+      color: #0284c7;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .auth-register-link a:hover {
+      text-decoration: underline;
+    }
+    .portal-switch {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 18px;
+      font-size: 12px;
+      text-align: center;
+      color: #6c757d;
+    }
+  </style>
+</head>
+<body>
+  {% include "blood/navbar.html" %}
+
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="auth-icon">
+          <i class="fas fa-procedures"></i>
+        </div>
+        <h3>Patient Login</h3>
+        <p>Access your blood requests and status</p>
+      </div>
+
+      <div class="auth-body">
+        {% if form.errors %}
+          <div class="alert alert-danger" style="font-size: 13px; border-radius: 8px;">
+            <i class="fas fa-exclamation-circle"></i> Invalid username or password. Please try again.
+          </div>
+        {% endif %}
+
+        <form method="POST">
+          {% csrf_token %}
+          <div class="form-group">
+            <label><i class="fas fa-user text-muted"></i> Username</label>
+            {% render_field form.username class="form-control form-control-hemo" placeholder="Enter patient username" %}
+          </div>
+          <div class="form-group mb-4">
+            <label><i class="fas fa-lock text-muted"></i> Password</label>
+            {% render_field form.password class="form-control form-control-hemo" placeholder="Enter password" %}
+          </div>
+          <button type="submit" class="btn btn-auth">
+            <i class="fas fa-sign-in-alt"></i> Login as Patient
+          </button>
+        </form>
+
+        <div class="auth-register-link">
+          Don't have an account? <a href="/patient/patientsignup">Register as Patient</a>
+        </div>
+
+        <div class="portal-switch">
+          Switch portal: <a href="/donor/donorlogin">Donor Login</a> &bull; <a href="/adminlogin">Admin Portal</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include "blood/footer.html" %}
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
