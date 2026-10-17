@@ -202,7 +202,7 @@ def update_approve_status_view(request, pk):
     bloodgroup = req.bloodgroup
     unit = req.unit
     stock = models.Stock.objects.get(bloodgroup=bloodgroup)
-    if stock.unit > unit:
+    if stock.unit >= unit:
         stock.unit = stock.unit - unit
         stock.save()
         req.status = "Approved"
@@ -225,21 +225,23 @@ def update_reject_status_view(request, pk):
 @login_required(login_url='adminlogin')
 def approve_donation_view(request, pk):
     donation = dmodels.BloodDonate.objects.get(id=pk)
-    donation_blood_group = donation.bloodgroup
-    donation_blood_unit = donation.unit
+    if donation.status != 'Approved':
+        donation_blood_group = donation.bloodgroup
+        donation_blood_unit = donation.unit
 
-    stock = models.Stock.objects.get(bloodgroup=donation_blood_group)
-    stock.unit = stock.unit + donation_blood_unit
-    stock.save()
+        stock = models.Stock.objects.get(bloodgroup=donation_blood_group)
+        stock.unit = stock.unit + donation_blood_unit
+        stock.save()
 
-    donation.status = 'Approved'
-    donation.save()
+        donation.status = 'Approved'
+        donation.save()
     return HttpResponseRedirect('/admin-donation')
 
 
 @login_required(login_url='adminlogin')
 def reject_donation_view(request, pk):
     donation = dmodels.BloodDonate.objects.get(id=pk)
-    donation.status = 'Rejected'
-    donation.save()
+    if donation.status != 'Approved':
+        donation.status = 'Rejected'
+        donation.save()
     return HttpResponseRedirect('/admin-donation')

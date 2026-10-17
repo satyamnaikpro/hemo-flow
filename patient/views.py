@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from . import forms, models
 from django.contrib.auth.models import Group
 from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 from blood import forms as bforms
 from blood import models as bmodels
 
@@ -27,6 +28,7 @@ def patient_signup_view(request):
     return render(request, 'patient/patientsignup.html', context=mydict)
 
 
+@login_required(login_url='patientlogin')
 def patient_dashboard_view(request):
     patient = models.Patient.objects.get(user_id=request.user.id)
     dict = {
@@ -38,6 +40,7 @@ def patient_dashboard_view(request):
     return render(request, 'patient/patient_dashboard.html', context=dict)
 
 
+@login_required(login_url='patientlogin')
 def make_request_view(request):
     request_form = bforms.RequestForm()
     if request.method == 'POST':
@@ -52,6 +55,7 @@ def make_request_view(request):
     return render(request, 'patient/makerequest.html', {'request_form': request_form})
 
 
+@login_required(login_url='patientlogin')
 def my_request_view(request):
     patient = models.Patient.objects.get(user_id=request.user.id)
     blood_request = bmodels.BloodRequest.objects.all().filter(request_by_patient=patient)
