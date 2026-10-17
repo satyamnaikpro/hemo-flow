@@ -3,6 +3,7 @@ from . import forms, models
 from django.contrib.auth.models import Group
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from blood import forms as bforms
 from blood import models as bmodels
 
@@ -24,7 +25,8 @@ def donor_signup_view(request):
             donor.save()
             my_donor_group = Group.objects.get_or_create(name='DONOR')
             my_donor_group[0].user_set.add(user)
-        return HttpResponseRedirect('donorlogin')
+            messages.success(request, "Donor account created successfully! Please login.")
+            return HttpResponseRedirect('donorlogin')
     return render(request, 'donor/donorsignup.html', context=mydict)
 
 
@@ -51,6 +53,7 @@ def donate_blood_view(request):
             donor = models.Donor.objects.get(user_id=request.user.id)
             blood_donate.donor = donor
             blood_donate.save()
+            messages.success(request, f"Donation request for {blood_donate.unit} unit(s) submitted! Awaiting administrator approval.")
             return HttpResponseRedirect('donation-history')
     return render(request, 'donor/donate_blood.html', {'donation_form': donation_form})
 
@@ -73,6 +76,7 @@ def make_request_view(request):
             donor = models.Donor.objects.get(user_id=request.user.id)
             blood_request.request_by_donor = donor
             blood_request.save()
+            messages.success(request, f"Blood requisition of {blood_request.unit} unit(s) of {blood_request.bloodgroup} placed successfully.")
             return HttpResponseRedirect('request-history')
     return render(request, 'donor/makerequest.html', {'request_form': request_form})
 

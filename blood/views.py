@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import logout as auth_logout
+from django.contrib import messages
 from donor import models as dmodels
 from patient import models as pmodels
 from donor import forms as dforms
@@ -127,6 +128,7 @@ def update_donor_view(request, pk):
             donor.user = user
             donor.bloodgroup = donorForm.cleaned_data['bloodgroup']
             donor.save()
+            messages.success(request, f"Donor {donor.get_name} updated successfully.")
             return redirect('admin-donor')
     return render(request, 'blood/update_donor.html', context=mydict)
 
@@ -134,9 +136,11 @@ def update_donor_view(request, pk):
 @login_required(login_url='adminlogin')
 def delete_donor_view(request, pk):
     donor = dmodels.Donor.objects.get(id=pk)
+    donor_name = donor.get_name
     user = User.objects.get(id=donor.user_id)
     user.delete()
     donor.delete()
+    messages.info(request, f"Donor {donor_name} removed.")
     return HttpResponseRedirect('/admin-donor')
 
 
@@ -164,6 +168,7 @@ def update_patient_view(request, pk):
             patient.user = user
             patient.bloodgroup = patientForm.cleaned_data['bloodgroup']
             patient.save()
+            messages.success(request, f"Patient {patient.get_name} updated successfully.")
             return redirect('admin-patient')
     return render(request, 'blood/update_patient.html', context=mydict)
 
@@ -171,9 +176,11 @@ def update_patient_view(request, pk):
 @login_required(login_url='adminlogin')
 def delete_patient_view(request, pk):
     patient = pmodels.Patient.objects.get(id=pk)
+    patient_name = patient.get_name
     user = User.objects.get(id=patient.user_id)
     user.delete()
     patient.delete()
+    messages.info(request, f"Patient {patient_name} removed.")
     return HttpResponseRedirect('/admin-patient')
 
 
@@ -198,7 +205,6 @@ def admin_donation_view(request):
 @login_required(login_url='adminlogin')
 def update_approve_status_view(request, pk):
     req = models.BloodRequest.objects.get(id=pk)
-    message = None
     bloodgroup = req.bloodgroup
     unit = req.unit
     stock = models.Stock.objects.get(bloodgroup=bloodgroup)
@@ -206,12 +212,12 @@ def update_approve_status_view(request, pk):
         stock.unit = stock.unit - unit
         stock.save()
         req.status = "Approved"
+        req.save()
+        messages.success(request, f"Approved request for {req.patient_name} ({unit} unit(s) of {bloodgroup}). Stock updated.")
     else:
-        message = "Stock Does Not Have Enough Blood To Approve This Request, Only " + str(stock.unit) + " Unit Available"
-    req.save()
+        messages.error(request, f"Cannot approve request! Only {stock.unit} unit(s) of {bloodgroup} available.")
 
-    requests = models.BloodRequest.objects.all().filter(status='Pending')
-    return render(request, 'blood/admin_request.html', {'requests': requests, 'message': message})
+    return redirect('admin-request')
 
 
 @login_required(login_url='adminlogin')
@@ -219,6 +225,7 @@ def update_reject_status_view(request, pk):
     req = models.BloodRequest.objects.get(id=pk)
     req.status = "Rejected"
     req.save()
+    messages.warning(request, f"Rejected blood request for {req.patient_name}.")
     return HttpResponseRedirect('/admin-request')
 
 
@@ -235,6 +242,9 @@ def approve_donation_view(request, pk):
 
         donation.status = 'Approved'
         donation.save()
+        messages.success(request, f"Donation of {donation_blood_unit} unit(s) of {donation_blood_group} approved and added to inventory.")
+    else:
+        messages.info(request, "This donation is already approved.")
     return HttpResponseRedirect('/admin-donation')
 
 
@@ -244,4 +254,5 @@ def reject_donation_view(request, pk):
     if donation.status != 'Approved':
         donation.status = 'Rejected'
         donation.save()
+        messages.warning(request, f"Donation rejected.")
     return HttpResponseRedirect('/admin-donation')

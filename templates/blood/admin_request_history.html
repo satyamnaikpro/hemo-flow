@@ -1,92 +1,185 @@
 {% extends 'blood/adminbase.html' %}
 {% block content %}
-{% load widget_tweaks %}
-{%load static%}
+{% load static %}
 
-<head>
-    <style>
-        .label {
-            color: white;
-            padding: 8px;
-        }
+<div class="container-fluid">
+  <!-- Header & Action Card -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+      <h3 style="font-weight: 700; color: #1d2d44; margin: 0;">
+        <i class="fas fa-history text-info mr-2"></i> Blood Request History
+      </h3>
+      <p class="text-muted mb-0" style="font-size: 14px;">Historical record of all approved and rejected requisitions</p>
+    </div>
+    <span class="badge badge-pill badge-info px-3 py-2" id="historyCountBadge" style="font-size: 13px;">
+      Total: {{ requests|length }} Records
+    </span>
+  </div>
 
-        .success {
-            background-color: #4CAF50;
-        }
+  <!-- Search & Filter Controls -->
+  <div class="card mb-4" style="border-radius: 12px; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+    <div class="card-body py-3">
+      <div class="row align-items-center">
+        <div class="col-md-5 mb-2 mb-md-0">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text bg-white border-right-0" style="border-radius: 8px 0 0 8px;">
+                <i class="fas fa-search text-muted"></i>
+              </span>
+            </div>
+            <input type="text" id="historySearchInput" class="form-control border-left-0" placeholder="Search by patient name, reason..." style="border-radius: 0 8px 8px 0; font-size: 14px;">
+          </div>
+        </div>
+        <div class="col-md-3 mb-2 mb-md-0">
+          <select id="historyBloodGroupFilter" class="form-control" style="border-radius: 8px; font-size: 14px;">
+            <option value="">Blood Group (All)</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+          </select>
+        </div>
+        <div class="col-md-2 mb-2 mb-md-0">
+          <select id="historyStatusFilter" class="form-control" style="border-radius: 8px; font-size: 14px;">
+            <option value="">Status (All)</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button id="resetHistoryFilter" class="btn btn-outline-secondary btn-block" style="border-radius: 8px; font-size: 14px;">
+            <i class="fas fa-undo mr-1"></i> Reset
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        /* Green */
-        .info {
-            background-color: #2196F3;
-        }
-
-        /* Blue */
-        .warning {
-            background-color: #ff9800;
-        }
-
-        /* Orange */
-        .danger {
-            background-color: #f44336;
-        }
-
-        /* Red */
-        .other {
-            background-color: #e7e7e7;
-            color: black;
-        }
-
-        /* Gray */
-    </style>
-</head>
-<br><br>
-<div class="container">
-    <H4 class="text-center">Blood Request History</H4><br>
-    {% if message %}
-    <h5 class="text-center" style="color: red;"> {{message}}</h5><br>
-    {% else %}
-
-    {% endif %}
-    <table class="table table-light table-hover table-bordered table-striped">
-        <thead class="bg-info">
-            <tr>
-                <th scope="col">Patient Name</th>
-                <th scope="col">Age</th>
-
-                <th scope="col">Reason</th>
-                <th scope="col">Blood Group</th>
-                <th scope="col">Unit (in ml)</th>
-                <th scope="col">Date</th>
-                <th scope="col">Status</th>
-                <th scope="col">Stock Status</th>
-
-            </tr>
+  <!-- Table Card -->
+  <div class="card" style="border-radius: 14px; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 6px 20px rgba(0,0,0,0.04); overflow: hidden;">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0" id="historyTable">
+        <thead style="background: #f8f9fa; color: #495057; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;">
+          <tr>
+            <th class="py-3 px-4">Patient Name</th>
+            <th class="py-3">Age</th>
+            <th class="py-3">Reason</th>
+            <th class="py-3 text-center">Group</th>
+            <th class="py-3 text-center">Unit</th>
+            <th class="py-3">Date</th>
+            <th class="py-3 text-center">Decision Status</th>
+            <th class="py-3 text-right pr-4">Inventory Impact</th>
+          </tr>
         </thead>
-        <tbody>
-            {% for t in requests %}
-            <tr>
-                <td> {{t.patient_name}}</td>
-                <td>{{t.patient_age}}</td>
-
-
-                <td>{{t.reason}}</td>
-                <td>{{t.bloodgroup}}</td>
-                <td>{{t.unit}}</td>
-                <td>{{t.date}}</td>
-                {% if t.status == 'Approved' %}
-                <td><span class="label warning"> Approved</span></td>
-                <td><span class="label warning"> {{t.unit}} Unit Deducted From Stock</span></td>
-                {% else %}
-                <td><span class="label success">Rejected</span></td>
-                <td><span class="label success"> 0 Unit Deducted From Stock</span></td>
-                {% endif %}
-
-
-
-            </tr>
-            {% endfor %}
-
+        <tbody style="font-size: 14px;">
+          {% for t in requests %}
+          <tr class="history-row" data-name="{{ t.patient_name|lower }}" data-reason="{{ t.reason|lower }}" data-blood="{{ t.bloodgroup }}" data-status="{{ t.status }}">
+            <td class="px-4 font-weight-bold" style="color: #1d2d44; vertical-align: middle;">
+              {{ t.patient_name }}
+            </td>
+            <td style="vertical-align: middle; color: #495057;">{{ t.patient_age }}</td>
+            <td style="vertical-align: middle; color: #6c757d;">{{ t.reason }}</td>
+            <td class="text-center" style="vertical-align: middle;">
+              <span class="badge badge-pill badge-danger px-3 py-1 font-weight-bold" style="font-size: 13px;">
+                {{ t.bloodgroup }}
+              </span>
+            </td>
+            <td class="text-center font-weight-bold" style="vertical-align: middle; color: #1d2d44;">{{ t.unit }}</td>
+            <td style="vertical-align: middle; color: #6c757d;">{{ t.date }}</td>
+            <td class="text-center" style="vertical-align: middle;">
+              {% if t.status == 'Approved' %}
+                <span class="badge badge-success px-3 py-1 font-weight-bold" style="font-size: 12px;">
+                  <i class="fas fa-check-circle mr-1"></i> Approved
+                </span>
+              {% else %}
+                <span class="badge badge-danger px-3 py-1 font-weight-bold" style="font-size: 12px;">
+                  <i class="fas fa-times-circle mr-1"></i> Rejected
+                </span>
+              {% endif %}
+            </td>
+            <td class="text-right pr-4 font-weight-bold" style="vertical-align: middle;">
+              {% if t.status == 'Approved' %}
+                <span class="text-success"><i class="fas fa-minus-circle mr-1"></i> -{{ t.unit }} Unit(s)</span>
+              {% else %}
+                <span class="text-muted">0 Units</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="8" class="text-center py-5 text-muted">
+              <i class="fas fa-folder-open fa-3x mb-3 d-block text-muted" style="opacity: 0.5;"></i>
+              No historical request records found.
+            </td>
+          </tr>
+          {% endfor %}
+          <tr id="noHistoryResultsRow" style="display: none;">
+            <td colspan="8" class="text-center py-4 text-muted">
+              <i class="fas fa-search mr-2"></i> No records matching your filter criteria.
+            </td>
+          </tr>
         </tbody>
-
-    </table>
-    {% endblock content %}
+      </table>
+    </div>
+  </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('historySearchInput');
+  const bloodFilter = document.getElementById('historyBloodGroupFilter');
+  const statusFilter = document.getElementById('historyStatusFilter');
+  const resetBtn = document.getElementById('resetHistoryFilter');
+  const rows = document.querySelectorAll('.history-row');
+  const noResultsRow = document.getElementById('noHistoryResultsRow');
+  const countBadge = document.getElementById('historyCountBadge');
+
+  function filterTable() {
+    const query = searchInput.value.toLowerCase().trim();
+    const selectedBlood = bloodFilter.value.trim();
+    const selectedStatus = statusFilter.value.trim();
+    let visibleCount = 0;
+
+    rows.forEach(function(row) {
+      const name = row.getAttribute('data-name');
+      const reason = row.getAttribute('data-reason');
+      const blood = row.getAttribute('data-blood');
+      const status = row.getAttribute('data-status');
+
+      const matchesSearch = !query || name.includes(query) || reason.includes(query);
+      const matchesBlood = !selectedBlood || blood === selectedBlood;
+      const matchesStatus = !selectedStatus || status.toLowerCase() === selectedStatus.toLowerCase();
+
+      if (matchesSearch && matchesBlood && matchesStatus) {
+        row.style.display = '';
+        visibleCount++;
+      } else {
+        row.style.display = 'none';
+      }
+    });
+
+    if (noResultsRow) {
+      noResultsRow.style.display = (visibleCount === 0 && rows.length > 0) ? '' : 'none';
+    }
+    if (countBadge) {
+      countBadge.textContent = 'Showing: ' + visibleCount + ' Records';
+    }
+  }
+
+  searchInput.addEventListener('input', filterTable);
+  bloodFilter.addEventListener('change', filterTable);
+  statusFilter.addEventListener('change', filterTable);
+  resetBtn.addEventListener('click', function() {
+    searchInput.value = '';
+    bloodFilter.value = '';
+    statusFilter.value = '';
+    filterTable();
+  });
+});
+</script>
+
+{% endblock content %}

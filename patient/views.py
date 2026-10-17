@@ -3,6 +3,7 @@ from . import forms, models
 from django.contrib.auth.models import Group
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from blood import forms as bforms
 from blood import models as bmodels
 
@@ -24,7 +25,8 @@ def patient_signup_view(request):
             patient.save()
             my_patient_group = Group.objects.get_or_create(name='PATIENT')
             my_patient_group[0].user_set.add(user)
-        return HttpResponseRedirect('patientlogin')
+            messages.success(request, "Patient account created successfully! Please login.")
+            return HttpResponseRedirect('patientlogin')
     return render(request, 'patient/patientsignup.html', context=mydict)
 
 
@@ -51,6 +53,7 @@ def make_request_view(request):
             patient = models.Patient.objects.get(user_id=request.user.id)
             blood_request.request_by_patient = patient
             blood_request.save()
+            messages.success(request, f"Blood requisition of {blood_request.unit} unit(s) of {blood_request.bloodgroup} placed successfully.")
             return HttpResponseRedirect('my-request')
     return render(request, 'patient/makerequest.html', {'request_form': request_form})
 

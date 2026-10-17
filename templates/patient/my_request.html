@@ -1,86 +1,167 @@
 {% extends 'patient/patientbase.html' %}
 {% block content %}
-{% load widget_tweaks %}
-{%load static%}
+{% load static %}
 
-<head>
-    <style>
-        .label {
-            color: white;
-            padding: 8px;
-        }
+<div class="container-fluid">
+  <!-- Header -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+      <h3 style="font-weight: 700; color: #1d2d44; margin: 0;">
+        <i class="fas fa-history text-primary mr-2"></i> My Blood Requests
+      </h3>
+      <p class="text-muted mb-0" style="font-size: 14px;">Monitor your blood requisition status and hospital review decisions</p>
+    </div>
+    <span class="badge badge-pill badge-primary px-3 py-2" id="patientReqBadge" style="font-size: 13px;">
+      Total: {{ blood_request|length }} Requests
+    </span>
+  </div>
 
-        .success {
-            background-color: #4CAF50;
-        }
+  <!-- Search & Filter Controls -->
+  <div class="card mb-4" style="border-radius: 12px; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+    <div class="card-body py-3">
+      <div class="row align-items-center">
+        <div class="col-md-7 mb-2 mb-md-0">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text bg-white border-right-0" style="border-radius: 8px 0 0 8px;">
+                <i class="fas fa-search text-muted"></i>
+              </span>
+            </div>
+            <input type="text" id="myReqSearch" class="form-control border-left-0" placeholder="Search by reason, date, or notes..." style="border-radius: 0 8px 8px 0; font-size: 14px;">
+          </div>
+        </div>
+        <div class="col-md-3 mb-2 mb-md-0">
+          <select id="myReqStatusFilter" class="form-control" style="border-radius: 8px; font-size: 14px;">
+            <option value="">Status (All)</option>
+            <option value="Pending">Pending</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button id="resetMyReqFilter" class="btn btn-outline-secondary btn-block" style="border-radius: 8px; font-size: 14px;">
+            <i class="fas fa-undo mr-1"></i> Reset
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        /* Green */
-        .info {
-            background-color: #2196F3;
-        }
-
-        /* Blue */
-        .warning {
-            background-color: #ff9800;
-        }
-
-        /* Orange */
-        .danger {
-            background-color: #f44336;
-        }
-
-        /* Red */
-        .other {
-            background-color: #e7e7e7;
-            color: black;
-        }
-
-        /* Gray */
-    </style>
-</head>
-<br><br>
-<div class="container">
-    <H4 class="text-center">My Blood Request</H4><br>
-    <table class="table table-light table-hover table-bordered table-striped">
-        <thead class="bg-info">
-            <tr>
-                <th scope="col">Patient Name</th>
-                <th scope="col">Patient Age</th>
-                <th scope="col">Reason</th>
-                <th scope="col">Blood Group</th>
-                <th scope="col">Unit</th>
-                <th scope="col">Date</th>
-                <th scope="col">Status</th>
-
-            </tr>
+  <!-- Table Card -->
+  <div class="card" style="border-radius: 14px; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 6px 20px rgba(0,0,0,0.04); overflow: hidden;">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0" id="myReqTable">
+        <thead style="background: #f8f9fa; color: #495057; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;">
+          <tr>
+            <th class="py-3 px-4">Date</th>
+            <th class="py-3 text-center">Group</th>
+            <th class="py-3 text-center">Unit</th>
+            <th class="py-3">Clinical Reason</th>
+            <th class="py-3">Patient Age</th>
+            <th class="py-3 text-right pr-4">Review Status</th>
+          </tr>
         </thead>
-        <tbody>
-            {% for t in blood_request %}
-            <tr>
-                <td> {{t.patient_name}}</td>
-
-                <td>{{t.patient_age}}</td>
-                <td>{{t.reason}}</td>
-                <td>{{t.bloodgroup}}</td>
-                <td>{{t.unit}}</td>
-                <td>{{t.date}}</td>
-                {% if t.status == 'Approved' %}
-                <td><span class="label warning"> Approved</span></td>
-
-                {% elif t.status == 'Rejected' %}
-                <td><span class="label success">Rejected</span></td>
-                {% else %}
-                <td><span style="color: white;margin-left: 0px;" class="label info">Pending</span></td>
-                {% endif %}
-
-
-            </tr>
-            {% endfor %}
-
+        <tbody style="font-size: 14px;">
+          {% for t in blood_request %}
+          <tr class="my-req-row" data-search="{{ t.date }} {{ t.reason|lower }}" data-status="{{ t.status }}">
+            <td class="px-4 font-weight-bold" style="color: #1d2d44; vertical-align: middle;">
+              {{ t.date }}
+            </td>
+            <td class="text-center" style="vertical-align: middle;">
+              <span class="badge badge-pill badge-danger px-3 py-1 font-weight-bold" style="font-size: 13px;">
+                {{ t.bloodgroup }}
+              </span>
+            </td>
+            <td class="text-center font-weight-bold" style="vertical-align: middle; color: #1d2d44;">
+              {{ t.unit }}
+            </td>
+            <td style="vertical-align: middle; color: #6c757d;">{{ t.reason }}</td>
+            <td style="vertical-align: middle; color: #495057;">{{ t.patient_age }} yrs</td>
+            <td class="text-right pr-4" style="vertical-align: middle;">
+              {% if t.status == 'Approved' %}
+                <span class="badge badge-success px-3 py-1 font-weight-bold" style="font-size: 12px;">
+                  <i class="fas fa-check-circle mr-1"></i> Approved
+                </span>
+              {% elif t.status == 'Rejected' %}
+                <span class="badge badge-danger px-3 py-1 font-weight-bold" style="font-size: 12px;">
+                  <i class="fas fa-times-circle mr-1"></i> Rejected
+                </span>
+              {% else %}
+                <span class="badge badge-warning px-3 py-1 font-weight-bold" style="font-size: 12px;">
+                  <i class="fas fa-clock mr-1"></i> Under Review
+                </span>
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="6" class="text-center py-5 text-muted">
+              <i class="fas fa-clipboard-list fa-3x mb-3 d-block text-muted" style="opacity: 0.5;"></i>
+              No blood requests placed yet.
+              <div class="mt-2">
+                <a href="/patient/make-request" class="btn btn-sm btn-primary font-weight-bold" style="border-radius: 8px;">
+                  <i class="fas fa-plus-circle mr-1"></i> Make Blood Request
+                </a>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+          <tr id="noMyReqResultsRow" style="display: none;">
+            <td colspan="6" class="text-center py-4 text-muted">
+              <i class="fas fa-search mr-2"></i> No requests matching your filter.
+            </td>
+          </tr>
         </tbody>
-
-    </table>
+      </table>
+    </div>
+  </div>
 </div>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('myReqSearch');
+  const statusFilter = document.getElementById('myReqStatusFilter');
+  const resetBtn = document.getElementById('resetMyReqFilter');
+  const rows = document.querySelectorAll('.my-req-row');
+  const noResultsRow = document.getElementById('noMyReqResultsRow');
+  const countBadge = document.getElementById('patientReqBadge');
+
+  function filterTable() {
+    const query = searchInput.value.toLowerCase().trim();
+    const selectedStatus = statusFilter.value.trim();
+    let visibleCount = 0;
+
+    rows.forEach(function(row) {
+      const searchData = row.getAttribute('data-search');
+      const status = row.getAttribute('data-status');
+
+      const matchesSearch = !query || searchData.includes(query);
+      const matchesStatus = !selectedStatus || status.toLowerCase() === selectedStatus.toLowerCase();
+
+      if (matchesSearch && matchesStatus) {
+        row.style.display = '';
+        visibleCount++;
+      } else {
+        row.style.display = 'none';
+      }
+    });
+
+    if (noResultsRow) {
+      noResultsRow.style.display = (visibleCount === 0 && rows.length > 0) ? '' : 'none';
+    }
+    if (countBadge) {
+      countBadge.textContent = 'Showing: ' + visibleCount + ' Requests';
+    }
+  }
+
+  searchInput.addEventListener('input', filterTable);
+  statusFilter.addEventListener('change', filterTable);
+  resetBtn.addEventListener('click', function() {
+    searchInput.value = '';
+    statusFilter.value = '';
+    filterTable();
+  });
+});
+</script>
 
 {% endblock content %}
