@@ -66,7 +66,6 @@
     }
     .logout-btn:hover {
       background: rgba(0, 0, 0, 0.4);
-      transform: translateY(-1px);
     }
 
     /* Layout */
@@ -155,17 +154,17 @@
       }
     }
 
-    /* Common Card Styling for Dashboards */
+    /* Professional Working Area Card Styling */
     .card {
-      border-radius: 12px;
-      border: 1px solid rgba(0, 0, 0, 0.06);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
-      transition: all 0.25s ease;
+      background: #ffffff;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
       overflow: hidden;
+      transition: border-color 0.15s ease;
     }
     .card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      border-color: #cbd5e0;
     }
     .card.bg-light {
       background: #ffffff !important;
@@ -237,9 +236,9 @@
     }
     .filter-card {
       background: #ffffff;
-      border-radius: 12px;
-      border: 1px solid rgba(0, 0, 0, 0.06);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
     }
     .btn-reset-filter {
       height: 42px;
@@ -256,18 +255,16 @@
       padding: 0 16px;
       white-space: nowrap;
       width: 100%;
-      transition: all 0.2s ease;
+      transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
       cursor: pointer;
     }
     .btn-reset-filter:hover {
       background: #edf2f7;
       color: #1d2d44;
       border-color: #cbd5e0;
-      transform: translateY(-1px);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
     .btn-reset-filter:active {
-      transform: translateY(0);
+      background: #e2e8f0;
     }
   </style>
 </head>
