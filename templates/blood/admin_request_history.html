@@ -31,24 +31,74 @@
           </div>
         </div>
         <div class="col-lg-3 col-md-3 mb-2 mb-md-0">
-          <select id="historyBloodGroupFilter" class="form-control">
-            <option value="">Blood Group (All)</option>
-            <option value="A+">Blood Group: A+</option>
-            <option value="A-">Blood Group: A-</option>
-            <option value="B+">Blood Group: B+</option>
-            <option value="B-">Blood Group: B-</option>
-            <option value="O+">Blood Group: O+</option>
-            <option value="O-">Blood Group: O-</option>
-            <option value="AB+">Blood Group: AB+</option>
-            <option value="AB-">Blood Group: AB-</option>
-          </select>
+          <div class="dropdown hemo-dropdown w-100">
+            <input type="hidden" id="historyBloodGroupFilter" value="">
+            <button class="btn hemo-dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span class="dropdown-label">Blood Group (All)</span>
+              <i class="fas fa-chevron-down dropdown-arrow"></i>
+            </button>
+            <div class="dropdown-menu hemo-dropdown-menu">
+              <a class="hemo-dropdown-item active" data-value="" data-label="Blood Group (All)">
+                <span>All Blood Groups</span>
+                <i class="fas fa-check check-icon"></i>
+              </a>
+              <a class="hemo-dropdown-item" data-value="A+" data-label="Blood Group: A+">
+                <span><span class="hemo-badge-blood">A+</span> Blood Group A+</span>
+                <i class="fas fa-check check-icon"></i>
+              </a>
+              <a class="hemo-dropdown-item" data-value="A-" data-label="Blood Group: A-">
+                <span><span class="hemo-badge-blood">A-</span> Blood Group A-</span>
+                <i class="fas fa-check check-icon"></i>
+              </a>
+              <a class="hemo-dropdown-item" data-value="B+" data-label="Blood Group: B+">
+                <span><span class="hemo-badge-blood">B+</span> Blood Group B+</span>
+                <i class="fas fa-check check-icon"></i>
+              </a>
+              <a class="hemo-dropdown-item" data-value="B-" data-label="Blood Group: B-">
+                <span><span class="hemo-badge-blood">B-</span> Blood Group B-</span>
+                <i class="fas fa-check check-icon"></i>
+              </a>
+              <a class="hemo-dropdown-item" data-value="O+" data-label="Blood Group: O+">
+                <span><span class="hemo-badge-blood">O+</span> Blood Group O+</span>
+                <i class="fas fa-check check-icon"></i>
+              </a>
+              <a class="hemo-dropdown-item" data-value="O-" data-label="Blood Group: O-">
+                <span><span class="hemo-badge-blood">O-</span> Blood Group O-</span>
+                <i class="fas fa-check check-icon"></i>
+              </a>
+              <a class="hemo-dropdown-item" data-value="AB+" data-label="Blood Group: AB+">
+                <span><span class="hemo-badge-blood">AB+</span> Blood Group AB+</span>
+                <i class="fas fa-check check-icon"></i>
+              </a>
+              <a class="hemo-dropdown-item" data-value="AB-" data-label="Blood Group: AB-">
+                <span><span class="hemo-badge-blood">AB-</span> Blood Group AB-</span>
+                <i class="fas fa-check check-icon"></i>
+              </a>
+            </div>
+          </div>
         </div>
         <div class="col-lg-3 col-md-3 mb-2 mb-md-0">
-          <select id="historyStatusFilter" class="form-control">
-            <option value="">Status (All)</option>
-            <option value="Approved">Status: Approved</option>
-            <option value="Rejected">Status: Rejected</option>
-          </select>
+          <div class="dropdown hemo-dropdown w-100">
+            <input type="hidden" id="historyStatusFilter" value="">
+            <button class="btn hemo-dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span class="dropdown-label">Status (All)</span>
+              <i class="fas fa-chevron-down dropdown-arrow"></i>
+            </button>
+            <div class="dropdown-menu hemo-dropdown-menu">
+              <a class="hemo-dropdown-item active" data-value="" data-label="Status (All)">
+                <span>All Statuses</span>
+                <i class="fas fa-check check-icon"></i>
+              </a>
+              <a class="hemo-dropdown-item" data-value="Approved" data-label="Status: Approved">
+                <span><span class="hemo-status-dot dot-approved"></span> Approved</span>
+                <i class="fas fa-check check-icon"></i>
+              </a>
+              <a class="hemo-dropdown-item" data-value="Rejected" data-label="Status: Rejected">
+                <span><span class="hemo-status-dot dot-rejected"></span> Rejected</span>
+                <i class="fas fa-check check-icon"></i>
+              </a>
+            </div>
+          </div>
         </div>
         <div class="col-lg-2 col-md-2">
           <button id="resetHistoryFilter" class="btn-reset-filter" title="Reset Filters">
@@ -177,6 +227,18 @@ document.addEventListener('DOMContentLoaded', function() {
     searchInput.value = '';
     bloodFilter.value = '';
     statusFilter.value = '';
+    document.querySelectorAll('.hemo-dropdown').forEach(function(d) {
+      const items = d.querySelectorAll('.hemo-dropdown-item');
+      items.forEach(function(it, idx) {
+        if (idx === 0) {
+          it.classList.add('active');
+          const lbl = d.querySelector('.dropdown-label');
+          if (lbl) lbl.textContent = it.getAttribute('data-label');
+        } else {
+          it.classList.remove('active');
+        }
+      });
+    });
     filterTable();
   });
 });

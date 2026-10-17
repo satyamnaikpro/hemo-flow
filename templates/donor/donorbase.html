@@ -266,6 +266,130 @@
     .btn-reset-filter:active {
       background: #e2e8f0;
     }
+
+    /* Custom Modern Dropdowns */
+    .hemo-dropdown {
+      position: relative;
+    }
+    .hemo-dropdown-toggle {
+      height: 42px;
+      background: #ffffff !important;
+      border: 1.5px solid #e2e8f0 !important;
+      border-radius: 8px !important;
+      font-size: 14px;
+      font-weight: 500;
+      color: #1d2d44 !important;
+      padding: 8px 14px !important;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.15s ease-in-out;
+      width: 100%;
+      box-shadow: none !important;
+    }
+    .hemo-dropdown-toggle:hover {
+      border-color: #cbd5e0 !important;
+      color: #1d2d44 !important;
+    }
+    .hemo-dropdown-toggle:focus,
+    .hemo-dropdown.show .hemo-dropdown-toggle {
+      border-color: #d90429 !important;
+      box-shadow: 0 0 0 3px rgba(217, 4, 41, 0.12) !important;
+      outline: none !important;
+      background: #ffffff !important;
+      color: #1d2d44 !important;
+    }
+    .hemo-dropdown-toggle::after {
+      display: none !important;
+    }
+    .hemo-dropdown-toggle .dropdown-arrow {
+      font-size: 11px;
+      color: #8d99ae;
+      transition: transform 0.2s ease, color 0.2s ease;
+      margin-left: 8px;
+    }
+    .hemo-dropdown.show .dropdown-arrow {
+      transform: rotate(180deg);
+      color: #d90429;
+    }
+    .hemo-dropdown-menu {
+      border-radius: 10px !important;
+      border: 1.5px solid #e2e8f0 !important;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1) !important;
+      padding: 6px !important;
+      margin-top: 4px !important;
+      max-height: 270px;
+      overflow-y: auto;
+      background: #ffffff !important;
+      z-index: 1060;
+      min-width: 100%;
+    }
+    .hemo-dropdown-menu::-webkit-scrollbar {
+      width: 5px;
+    }
+    .hemo-dropdown-menu::-webkit-scrollbar-thumb {
+      background: #cbd5e0;
+      border-radius: 4px;
+    }
+    .hemo-dropdown-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: #2b2d42 !important;
+      border-radius: 6px;
+      text-decoration: none !important;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+    }
+    .hemo-dropdown-item:hover {
+      background: #f8fafc !important;
+      color: #d90429 !important;
+    }
+    .hemo-dropdown-item.active {
+      background: rgba(217, 4, 41, 0.08) !important;
+      color: #d90429 !important;
+      font-weight: 600;
+    }
+    .hemo-dropdown-item .check-icon {
+      font-size: 11px;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      color: #d90429;
+    }
+    .hemo-dropdown-item.active .check-icon {
+      opacity: 1;
+    }
+    .hemo-badge-blood {
+      display: inline-block;
+      min-width: 28px;
+      padding: 2px 6px;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 4px;
+      text-align: center;
+      background: #fee2e2;
+      color: #dc2626;
+      margin-right: 8px;
+    }
+    .hemo-status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+    .dot-pending { background-color: #f59e0b; }
+    .dot-approved { background-color: #10b981; }
+    .dot-rejected { background-color: #ef4444; }
   </style>
 </head>
 <body>
@@ -318,5 +442,33 @@
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Modern Hemo Dropdown Event Delegation
+      document.addEventListener('click', function(e) {
+        const item = e.target.closest('.hemo-dropdown-item');
+        if (!item) return;
+        e.preventDefault();
+        const dropdown = item.closest('.hemo-dropdown');
+        if (!dropdown) return;
+
+        const val = item.getAttribute('data-value') !== null ? item.getAttribute('data-value') : '';
+        const labelText = item.getAttribute('data-label') || item.innerText.trim();
+        const hiddenInput = dropdown.querySelector('input[type="hidden"]');
+        const labelEl = dropdown.querySelector('.dropdown-label');
+
+        dropdown.querySelectorAll('.hemo-dropdown-item').forEach(function(i) {
+          i.classList.remove('active');
+        });
+        item.classList.add('active');
+
+        if (labelEl) labelEl.textContent = labelText;
+        if (hiddenInput) {
+          hiddenInput.value = val;
+          hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      });
+    });
+  </script>
 </body>
 </html>
