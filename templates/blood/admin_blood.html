@@ -1,145 +1,250 @@
 {% extends 'blood/adminbase.html' %}
 {% block content %}
-{% load widget_tweaks %}
-<style>
-  .xyz {
+{% load static %}
 
-    display: table;
-    margin-right: auto;
-    margin-left: auto;
-  }
-</style>
-<br><br>
-<div class="container">
+<div class="container-fluid">
+  <!-- Page Header -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+      <h3 style="font-weight: 700; color: #1d2d44; margin: 0;">
+        <i class="fas fa-hand-holding-water text-danger mr-2"></i> Blood Stock Management
+      </h3>
+      <p class="text-muted mb-0" style="font-size: 14px;">Monitor current blood bank reserves and update inventory counts</p>
+    </div>
+  </div>
 
-  <div class="row">
-    <div class="col-sm-3">
-      <div class="card bg-light">
-        <div class="card-body">
-          <div class="blood">
-            <h2>A+ <i class="fas fa-tint"></i></h2>
-          </div><br><br>
-          <div>
-            {{A1.unit}}
+  <!-- Blood Inventory Grid (Row 1: Positive Groups) -->
+  <div class="row mb-3">
+    <!-- A+ -->
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="card p-3" style="border-radius: 12px; border: 1px solid #e2e8f0; border-top: 3px solid #d90429;">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="badge badge-pill badge-danger px-3 py-1 font-weight-bold" style="font-size: 13px;">A+</span>
+          <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; background: rgba(217, 4, 41, 0.1); color: #d90429;">
+            <i class="fas fa-tint"></i>
           </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-baseline mt-2">
+          <h2 class="mb-0 font-weight-bold" style="font-size: 32px; color: #1d2d44;">{{ A1.unit }}</h2>
+          <span class="text-muted font-weight-medium" style="font-size: 13px;">Units Available</span>
         </div>
       </div>
     </div>
-    <div class="col-sm-3">
-      <div class="card bg-light">
-        <div class="card-body">
-          <div class="blood">
-            <h2>B+ <i class="fas fa-tint"></i></h2>
-          </div><br><br>
-          <div>
-            {{B1.unit}}
+
+    <!-- B+ -->
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="card p-3" style="border-radius: 12px; border: 1px solid #e2e8f0; border-top: 3px solid #d90429;">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="badge badge-pill badge-danger px-3 py-1 font-weight-bold" style="font-size: 13px;">B+</span>
+          <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; background: rgba(217, 4, 41, 0.1); color: #d90429;">
+            <i class="fas fa-tint"></i>
           </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-baseline mt-2">
+          <h2 class="mb-0 font-weight-bold" style="font-size: 32px; color: #1d2d44;">{{ B1.unit }}</h2>
+          <span class="text-muted font-weight-medium" style="font-size: 13px;">Units Available</span>
         </div>
       </div>
     </div>
-    <div class="col-sm-3">
-      <div class="card bg-light">
-        <div class="card-body">
-          <div class="blood">
-            <h2>O+ <i class="fas fa-tint"></i></h2>
-          </div><br><br>
-          <div>
-            {{O1.unit}}
+
+    <!-- O+ -->
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="card p-3" style="border-radius: 12px; border: 1px solid #e2e8f0; border-top: 3px solid #d90429;">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="badge badge-pill badge-danger px-3 py-1 font-weight-bold" style="font-size: 13px;">O+</span>
+          <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; background: rgba(217, 4, 41, 0.1); color: #d90429;">
+            <i class="fas fa-tint"></i>
           </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-baseline mt-2">
+          <h2 class="mb-0 font-weight-bold" style="font-size: 32px; color: #1d2d44;">{{ O1.unit }}</h2>
+          <span class="text-muted font-weight-medium" style="font-size: 13px;">Units Available</span>
         </div>
       </div>
     </div>
-    <div class="col-sm-3">
-      <div class="card bg-light">
-        <div class="card-body">
-          <div class="blood">
-            <h2>AB+ <i class="fas fa-tint"></i></h2>
-          </div><br><br>
-          <div>
-            {{AB1.unit}}
+
+    <!-- AB+ -->
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="card p-3" style="border-radius: 12px; border: 1px solid #e2e8f0; border-top: 3px solid #d90429;">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="badge badge-pill badge-danger px-3 py-1 font-weight-bold" style="font-size: 13px;">AB+</span>
+          <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; background: rgba(217, 4, 41, 0.1); color: #d90429;">
+            <i class="fas fa-tint"></i>
           </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-baseline mt-2">
+          <h2 class="mb-0 font-weight-bold" style="font-size: 32px; color: #1d2d44;">{{ AB1.unit }}</h2>
+          <span class="text-muted font-weight-medium" style="font-size: 13px;">Units Available</span>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-sm-3">
-      <div class="card bg-light">
-        <div class="card-body">
-          <div class="blood">
-            <h2>A- <i class="fas fa-tint"></i></h2>
-          </div><br><br>
-          <div>
-            {{A2.unit}}
+  <!-- Blood Inventory Grid (Row 2: Negative Groups) -->
+  <div class="row mb-4">
+    <!-- A- -->
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="card p-3" style="border-radius: 12px; border: 1px solid #e2e8f0; border-top: 3px solid #1d2d44;">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="badge badge-pill badge-dark px-3 py-1 font-weight-bold" style="font-size: 13px; background: #1d2d44;">A-</span>
+          <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; background: rgba(29, 45, 68, 0.1); color: #1d2d44;">
+            <i class="fas fa-tint"></i>
           </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-baseline mt-2">
+          <h2 class="mb-0 font-weight-bold" style="font-size: 32px; color: #1d2d44;">{{ A2.unit }}</h2>
+          <span class="text-muted font-weight-medium" style="font-size: 13px;">Units Available</span>
         </div>
       </div>
     </div>
-    <div class="col-sm-3">
-      <div class="card bg-light">
-        <div class="card-body">
-          <div class="blood">
-            <h2>B- <i class="fas fa-tint"></i></h2>
-          </div><br><br>
-          <div>
-            {{B2.unit}}
+
+    <!-- B- -->
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="card p-3" style="border-radius: 12px; border: 1px solid #e2e8f0; border-top: 3px solid #1d2d44;">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="badge badge-pill badge-dark px-3 py-1 font-weight-bold" style="font-size: 13px; background: #1d2d44;">B-</span>
+          <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; background: rgba(29, 45, 68, 0.1); color: #1d2d44;">
+            <i class="fas fa-tint"></i>
           </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-baseline mt-2">
+          <h2 class="mb-0 font-weight-bold" style="font-size: 32px; color: #1d2d44;">{{ B2.unit }}</h2>
+          <span class="text-muted font-weight-medium" style="font-size: 13px;">Units Available</span>
         </div>
       </div>
     </div>
-    <div class="col-sm-3">
-      <div class="card bg-light">
-        <div class="card-body">
-          <div class="blood">
-            <h2>O- <i class="fas fa-tint"></i></h2>
-          </div><br><br>
-          <div>
-            {{O2.unit}}
+
+    <!-- O- -->
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="card p-3" style="border-radius: 12px; border: 1px solid #e2e8f0; border-top: 3px solid #1d2d44;">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="badge badge-pill badge-dark px-3 py-1 font-weight-bold" style="font-size: 13px; background: #1d2d44;">O-</span>
+          <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; background: rgba(29, 45, 68, 0.1); color: #1d2d44;">
+            <i class="fas fa-tint"></i>
           </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-baseline mt-2">
+          <h2 class="mb-0 font-weight-bold" style="font-size: 32px; color: #1d2d44;">{{ O2.unit }}</h2>
+          <span class="text-muted font-weight-medium" style="font-size: 13px;">Units Available</span>
         </div>
       </div>
     </div>
-    <div class="col-sm-3">
-      <div class="card bg-light">
-        <div class="card-body">
-          <div class="blood">
-            <h2>AB- <i class="fas fa-tint"></i></h2>
-          </div><br><br>
-          <div>
-            {{AB2.unit}}
+
+    <!-- AB- -->
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="card p-3" style="border-radius: 12px; border: 1px solid #e2e8f0; border-top: 3px solid #1d2d44;">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="badge badge-pill badge-dark px-3 py-1 font-weight-bold" style="font-size: 13px; background: #1d2d44;">AB-</span>
+          <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; background: rgba(29, 45, 68, 0.1); color: #1d2d44;">
+            <i class="fas fa-tint"></i>
           </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-baseline mt-2">
+          <h2 class="mb-0 font-weight-bold" style="font-size: 32px; color: #1d2d44;">{{ AB2.unit }}</h2>
+          <span class="text-muted font-weight-medium" style="font-size: 13px;">Units Available</span>
         </div>
       </div>
     </div>
   </div>
-  <hr>
-  <br>
-  <h3 class="text-center">Update Blood Unit</h3><br>
-  <div class="xyz">
 
-    <form class="form-inline" method="POST">
-      {% csrf_token %}
-      <div class="form-group mx-sm-3 mb-6">
-
-        <select name="bloodgroup" class="form-control">
-          <option disabled="disabled" selected="selected">Choose Blood Group</option>
-          <option>O+</option>
-          <option>O-</option>
-          <option>A+</option>
-          <option>A-</option>
-          <option>B+</option>
-          <option>B-</option>
-          <option>AB+</option>
-          <option>AB-</option>
-        </select>
+  <!-- Update Blood Unit Card -->
+  <div class="card filter-card mb-4" style="border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 18px rgba(0,0,0,0.03);">
+    <div class="card-body p-4">
+      <div class="d-flex align-items-center mb-3">
+        <div class="rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 44px; height: 44px; background: rgba(217, 4, 41, 0.1); color: #d90429; font-size: 18px;">
+          <i class="fas fa-edit"></i>
+        </div>
+        <div>
+          <h4 class="mb-1" style="font-weight: 700; color: #1d2d44;">Update Blood Inventory</h4>
+          <p class="text-muted mb-0" style="font-size: 13.5px;">Directly adjust stock reserve levels for any blood group.</p>
+        </div>
       </div>
-      <div class="form-group mx-sm-3 mb-6">
 
-        <input type="number" class="form-control" name="unit" placeholder="Unit">
-      </div>
-      <button type="submit" class="btn btn-primary mb-2">Update</button>
-    </form>
+      <form method="POST" id="updateStockForm" class="mt-4">
+        {% csrf_token %}
+        <div class="row align-items-end">
+          <div class="col-lg-5 col-md-5 mb-3 mb-md-0">
+            <label class="font-weight-bold" style="font-size: 13.5px; color: #4a5568;">Select Blood Group</label>
+            <div class="dropdown hemo-dropdown w-100">
+              <input type="hidden" name="bloodgroup" id="stockBloodGroupInput" required>
+              <button class="btn hemo-dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="stockDropdownBtn">
+                <span class="dropdown-label text-muted">Choose Blood Group</span>
+                <i class="fas fa-chevron-down dropdown-arrow"></i>
+              </button>
+              <div class="dropdown-menu hemo-dropdown-menu">
+                <a class="hemo-dropdown-item" data-value="O+" data-label="Blood Group: O+">
+                  <span><span class="hemo-badge-blood">O+</span> Blood Group O+</span>
+                  <i class="fas fa-check check-icon"></i>
+                </a>
+                <a class="hemo-dropdown-item" data-value="O-" data-label="Blood Group: O-">
+                  <span><span class="hemo-badge-blood">O-</span> Blood Group O-</span>
+                  <i class="fas fa-check check-icon"></i>
+                </a>
+                <a class="hemo-dropdown-item" data-value="A+" data-label="Blood Group: A+">
+                  <span><span class="hemo-badge-blood">A+</span> Blood Group A+</span>
+                  <i class="fas fa-check check-icon"></i>
+                </a>
+                <a class="hemo-dropdown-item" data-value="A-" data-label="Blood Group: A-">
+                  <span><span class="hemo-badge-blood">A-</span> Blood Group A-</span>
+                  <i class="fas fa-check check-icon"></i>
+                </a>
+                <a class="hemo-dropdown-item" data-value="B+" data-label="Blood Group: B+">
+                  <span><span class="hemo-badge-blood">B+</span> Blood Group B+</span>
+                  <i class="fas fa-check check-icon"></i>
+                </a>
+                <a class="hemo-dropdown-item" data-value="B-" data-label="Blood Group: B-">
+                  <span><span class="hemo-badge-blood">B-</span> Blood Group B-</span>
+                  <i class="fas fa-check check-icon"></i>
+                </a>
+                <a class="hemo-dropdown-item" data-value="AB+" data-label="Blood Group: AB+">
+                  <span><span class="hemo-badge-blood">AB+</span> Blood Group AB+</span>
+                  <i class="fas fa-check check-icon"></i>
+                </a>
+                <a class="hemo-dropdown-item" data-value="AB-" data-label="Blood Group: AB-">
+                  <span><span class="hemo-badge-blood">AB-</span> Blood Group AB-</span>
+                  <i class="fas fa-check check-icon"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-4 mb-3 mb-md-0">
+            <label class="font-weight-bold" style="font-size: 13.5px; color: #4a5568;">New Unit Quantity</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-flask"></i></span>
+              </div>
+              <input type="number" min="0" class="form-control" name="unit" id="stockUnitInput" placeholder="Enter units (e.g. 20)" required>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-3">
+            <button type="submit" class="btn btn-danger btn-block font-weight-bold" style="height: 42px; border-radius: 8px; background: #d90429; border-color: #d90429;">
+              <i class="fas fa-check-circle mr-1"></i> Update Stock
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
-  {% endblock content %}
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('updateStockForm');
+  const bloodInput = document.getElementById('stockBloodGroupInput');
+  const dropdownBtn = document.getElementById('stockDropdownBtn');
+
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      if (!bloodInput.value) {
+        e.preventDefault();
+        dropdownBtn.focus();
+        dropdownBtn.click();
+      }
+    });
+  }
+});
+</script>
+
+{% endblock content %}

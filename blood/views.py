@@ -100,6 +100,9 @@ def admin_blood_view(request):
             stock = models.Stock.objects.get(bloodgroup=bloodgroup)
             stock.unit = bloodForm.cleaned_data['unit']
             stock.save()
+            messages.success(request, f"Successfully updated {bloodgroup} stock to {stock.unit} units.")
+        else:
+            messages.error(request, "Please choose a valid blood group and enter a valid unit quantity.")
         return HttpResponseRedirect('admin-blood')
     return render(request, 'blood/admin_blood.html', context=dict)
 
